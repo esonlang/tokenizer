@@ -1,5 +1,5 @@
 [package]
-name = "tokenizer"
+name = "eson-tokenizer"
 edition = "2021"
 version = "0.0.1"
 description = "The eson's tokenizer implementation"
