@@ -5,7 +5,7 @@ use nom::error::VerboseError;
 use nom::IResult;
 use nom_locate::LocatedSpan;
 
-pub use token::{ReadTokenRange, Token, TokenDec, TokenKey, TokenRange};
+pub use token::{ReadTokenRange, Token, TokenDec, TokenKey, TokenId, TokenRange};
 
 use crate::decorator::parse_decorators;
 use crate::dict::parse_dict;
