@@ -1,6 +1,10 @@
 [package]
 name = "tokenizer"
 edition = "2021"
+version = "0.0.1"
+description = "The eson's tokenizer implementation"
+repository = "https://github.com/esonlang/tokenizer"
+license = "Apache-2.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
