@@ -47,23 +47,23 @@ pub fn parse_base(i: Span) -> IResult<Span, Token, VerboseError<Span>> {
     ))
 }
 
-// trait SpanExt {
-//     // character_count(Span::from("hello \u{1F601}")) => 7
-//     fn character_count(&self) -> usize;
-//
-//     // byte_count(Span::from("hello \u{1F601}")) => 10
-//     fn byte_count(&self) -> usize;
-// }
-//
-// impl SpanExt for Span<'_> {
-//     fn character_count(&self) -> usize {
-//         self.fragment().chars().count()
-//     }
-//
-//     fn byte_count(&self) -> usize {
-//         self.fragment().len()
-//     }
-// }
+pub fn reduce_error(e: nom::Err<VerboseError<Span>>) -> (Vec<String>, Option<Span>) {
+    match e {
+        nom::Err::Error(e) | nom::Err::Failure(e) => {
+            // ErrorKind
+            let ctx_stack: Vec<String> = e
+                .errors
+                .iter()
+                .map(|(_, v)| {
+                    format!("{:?}", v)
+                })
+                .collect();
+            let first_span = e.errors.first().map(|(k, _)| k.clone());
+            (ctx_stack, first_span)
+        }
+        nom::Err::Incomplete(_) => (vec!["Incomplete".to_string()], None),
+    }
+}
 
 #[cfg(test)]
 mod tests {
@@ -96,32 +96,6 @@ mod tests {
             ))
         );
     }
-
-    // #[test]
-    // fn test_span_ext() {
-    //     let s = Span::from("hello \n");
-    //     assert_eq!(s.character_count(), 7);
-    //     assert_eq!(s.byte_count(), 7);
-    //
-    //     let s = Span::from("hello \r\n");
-    //     assert_eq!(s.character_count(), 8);
-    //     assert_eq!(s.byte_count(), 8);
-    //
-    //     let s = Span::from("hello \u{08}");
-    //     assert_eq!(s.to_string(), "hello \u{08}");
-    //     assert_eq!(s.character_count(), 7);
-    //     assert_eq!(s.byte_count(), 7);
-    //
-    //     let s = Span::from("hello \u{FE0F}");
-    //     assert_eq!(s.to_string(), "hello \u{FE0F}");
-    //     assert_eq!(s.character_count(), 7);
-    //     assert_eq!(s.byte_count(), 9);
-    //
-    //     let s = Span::from("hello \u{1F601}");
-    //     assert_eq!(s.to_string(), "hello 😁");
-    //     assert_eq!(s.character_count(), 7);
-    //     assert_eq!(s.byte_count(), 10);
-    // }
 
     #[test]
     fn test_parse_prim() {
